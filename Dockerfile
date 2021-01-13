@@ -14,11 +14,15 @@ RUN apt-get update -yqq && apt-get install -yqq \
     vim
 
 WORKDIR /usr/src/myapp
-
-COPY . /usr/src/myapp
-
+COPY Gemfile* /usr/src/myapp/
 RUN bundle install
-RUN bin/rails webpacker:install
 
+# note, that I have run bin/rails webpacker:install and included those files, so
+# the COPY operation already copies those in, making it so we don't have to run
+# that bootstrapping piece that is included in the book
 # run the app with a default command
+COPY . /usr/src/myapp/
+
+RUN echo "CACHED"
+LABEL maintainer="bobby@quantierra.com"
 CMD ["bin/rails", "s", "-b", "0.0.0.0"]

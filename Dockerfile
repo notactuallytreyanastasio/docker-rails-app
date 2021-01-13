@@ -1,4 +1,5 @@
 FROM ruby:2.7.2
+LABEL maintainer="bobby@quantierra.com"
 
 # add repositories for apt for nodejs, yarn
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
@@ -23,6 +24,4 @@ RUN bundle install
 # run the app with a default command
 COPY . /usr/src/myapp/
 
-RUN echo "CACHED"
-LABEL maintainer="bobby@quantierra.com"
 CMD ["bin/rails", "s", "-b", "0.0.0.0"]

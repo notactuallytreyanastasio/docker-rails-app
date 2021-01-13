@@ -3,12 +3,34 @@
 db_user=postgres
 
 usage:
-	@echo "Welcome to your friendly makefile interface to docker\nThese commands will help you interface with the application:\nUsage\nmake run-app                  # runs the whole app as is (no rebuild of images)\nmake build                    # build all layers\nmake kill-app                 # kills the app\nmake rebuild-all-and-run-app  # rebuild all images, run the full app\nmake run-tests                # run all tests, or just one with 'make run-tests spec=path_to_spec' (works with any spec)\nmake rebuild-layers           # rebuild all layers, or just one with 'make rebuild-layers layer=web' (or any other layer)\nmake rails-console            # enter a rails console\nmake database-console         # enter a database console session in postgresql\nmake redis-console            # enter a redis REPL session\nmake get-logs                 # get all logs, or one layers with 'make get-logs layer=web' (or any other layer)"
+	@echo "\nmake build                    # build all layers\nmake kill-app                 # kills the app\nmake rebuild-all-and-run-app  # rebuild all images, run the full app\nmake run-tests                # run all tests, or just one with 'make run-tests spec=path_to_spec' (works with any spec)\nmake rebuild-layers           # rebuild all layers, or just one with 'make rebuild-layers layer=web' (or any other layer)\nmake rails-console            # enter a rails console\nmake database-console         # enter a database console session in postgresql\nmake redis-console            # enter a redis REPL session\nmake get-logs                 # get all logs, or one layers with 'make get-logs layer=web' (or any other layer)\nmake build                    # build all or one specific layer, make build layer=web\nmake start-layer/stop-layer   # start or stop a layer, make stop-layer|start-layer layer=web\nmake bash-shell layer=layer   # start a bash shell for a given layer"
+
+tester:
+	@echo " Welcome to your friendly makefile interface to docker\n\n" \
+	"These commands will help you interface with the application:\n" \
+	"Usage\n\n" \
+	"make build                    # build all the layers, or just one with make build layer=layer (web, database, redis)\n" \
+	"make run-app                  # runs the whole app as is (no rebuild of images)\n" \
+	"make kill-app                 # kills the whole app as is\n" \
+	"make start-layer              # start a specific layer (web, database, redis, webpack-dev-server)\n" \
+	"make stop-layer               # stop a specific layer (web, database, redis, webpack-dev-server)\n" \
+	"make bash-shell               # start a bash shell in a given layer, useful for debugging\n" \
+	"make rebuild-all-and-run-app  # rebuild all layers, run the application\n" \
+	"make run-tests                # run all tests, or a specific test with make run-tests spec=path_to_spec\n" \
+	"make rails-console            # run a rails console in the web layer\n" \
+	"make database-console         # run a psql REPL in its layer\n" \
+	"make redis-console            # run a redis REPL in its layer\n" \
+	"make get-logs                 # by default gets all logs, to get one layer: make get-logs layer=web (or any other layer)\n" \
 
 # USAGE
-# build all layers
+# To do all layers:
+# make build
+# To do one layeR:
+# make build layer=layer
+# i.e
+# make build layer=web
 build:
-	@docker-compose build
+	@docker-compose build $(layer)
 
 # USAGE
 # $ make run-app
@@ -48,6 +70,27 @@ kill-app:
 	@docker-compose down
 
 # USAGE
+# make start-layer layer=web
+# works with any layer, ie database, redis, webpack-dev-server, web
+# useful for starting a single service
+start-layer:
+	@docker-compose up $(layer)
+
+# USAGE
+# make stop-layer layer=web
+# works with any layer, ie database, redis, webpack-dev-server, web
+# useful for stopping a single service
+stop-layer:
+	@docker-compose down $(layer)
+
+# Run a bash shell for a given layer
+# Useful for debugging happenings on a certain layer in the stack
+# Remember, if you are in the `web` layer, `psql` isnt there, and so forth
+# Each stack is isolated
+bash-shell:
+	@docker-compose run --rm $(layer) /bin/bash
+
+# USAGE
 # $ make rebuild-all-and-run-app
 # run all services with images rebuilt
 # If you want everything fresh, this is the move
@@ -74,23 +117,6 @@ run-tests:
 	echo "make run-tests spec=path_to_your_spec_or_directory"; \
 	docker-compose exec web bundle exec rspec $(spec)
 
-
-# USAGE
-# By default it will rebuild all layers with
-#
-# make rebuild-layers
-# make rebuild-layers layer=layer_name
-# i.e
-# make rebuild-layers layer=web
-# make rebuild-layers layer=database
-# make rebuild-layers layer=redis
-# make rebuild-layers layer=webpack-dev-server
-#
-# This is what you want to run when you make any changes to their
-# configuration or their general structure, it will ensure you get
-# a new image with the latest changes
-rebuild-layers:
-	@docker-compose build $(layer)
 
 # USAGE
 # make rails-console

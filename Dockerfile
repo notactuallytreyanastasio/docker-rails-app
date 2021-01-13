@@ -16,6 +16,7 @@ RUN apt-get update -yqq && apt-get install -yqq \
 
 WORKDIR /usr/src/myapp
 COPY Gemfile* /usr/src/myapp/
+ENV BUNDLE_PATH /gems
 RUN bundle install
 
 # note, that I have run bin/rails webpacker:install and included those files, so

@@ -8,6 +8,15 @@ services:
       - "3000:3000"
     volumes:
       - .:/usr/src/myapp
+    env_file:
+      - .env/development/web
+      - .env/development/database
 
   redis:
     image: redis
+
+  database:
+    image: postgres
+    env_file:
+      - .env/development/web
+      - .env/development/database

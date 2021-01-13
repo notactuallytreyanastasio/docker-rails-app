@@ -3,27 +3,12 @@
 db_user=postgres
 
 usage:
-	@echo "Welcome to your friendly makefile interface to docker"; \
-	echo "These commands will help you interface with the application:"; \
-	echo "Usage:"; \
-	echo "make run-app                  # runs the whole app as is (no rebuild of images)"; \
-	echo \
-	echo "kill-app                 # kills the app"; \
-	echo \
-	echo "rebuild-all-and-run-app  # rebuild all images, run the full app"; \
-	echo \
-	echo "run-tests                # run all tests, or just one with 'make run-tests spec=path_to_spec' (works with any spec)"; \
-	echo \
-	echo "rebuild-layers           # rebuild all layers, or just one with 'make rebuild-layers layer=web' (or any other layer)"; \
-	echo \
-	echo "rails-console            # enter a rails console"; \
-	echo \
-	echo "database-console         # enter a database console session in postgresql"; \
-	echo \
-	echo "redis-console            # enter a redis REPL session"; \
-	echo \
-	echo "get-logs                 # get all logs, or one layers with 'make get-logs layer=web' (or any other layer)"; \
+	@echo "Welcome to your friendly makefile interface to docker\nThese commands will help you interface with the application:\nUsage\nmake run-app                  # runs the whole app as is (no rebuild of images)\nmake build                    # build all layers\nmake kill-app                 # kills the app\nmake rebuild-all-and-run-app  # rebuild all images, run the full app\nmake run-tests                # run all tests, or just one with 'make run-tests spec=path_to_spec' (works with any spec)\nmake rebuild-layers           # rebuild all layers, or just one with 'make rebuild-layers layer=web' (or any other layer)\nmake rails-console            # enter a rails console\nmake database-console         # enter a database console session in postgresql\nmake redis-console            # enter a redis REPL session\nmake get-logs                 # get all logs, or one layers with 'make get-logs layer=web' (or any other layer)"
 
+# USAGE
+# build all layers
+build:
+	@docker-compose build
 
 # USAGE
 # $ make run-app

@@ -5,20 +5,19 @@ db_user=postgres
 usage:
 	@echo " Welcome to your friendly makefile interface to docker\n\n" \
 	"These commands will help you interface with the application:\n" \
+	"Note that when one of these say 'layer' it can be 'web' 'database' 'redis' or 'webpack-dev-server'\n" \
 	"Usage\n\n" \
-	"make build                    # build all the layers, or just one with make build layer=layer (web, database, redis)\n" \
-	"make bundle                   # bundle install in the web layer\n" \
-	"make run-app                  # runs the whole app as is (no rebuild of images)\n" \
-	"make kill-app                 # kills the whole app as is\n" \
-	"make start-layer              # start a specific layer (web, database, redis, webpack-dev-server)\n" \
-	"make stop-layer               # stop a specific layer (web, database, redis, webpack-dev-server)\n" \
-	"make bash-shell               # start a bash shell in a given layer, useful for debugging\n" \
-	"make rebuild-all-and-run-app  # rebuild all layers, run the application\n" \
-	"make run-tests                # run all tests, or a specific test with make run-tests spec=path_to_spec\n" \
-	"make rails-console            # run a rails console in the web layer\n" \
-	"make database-console         # run a psql REPL in its layer\n" \
-	"make redis-console            # run a redis REPL in its layer\n" \
-	"make get-logs                 # by default gets all logs, to get one layer: make get-logs layer=web (or any other layer)\n" \
+	"make build            # build all layers, or one w/ make build layer=layer \n" \
+	"make bundle           # bundle install in the web layer\n" \
+	"make run-app          # runs the whole app as is (no rebuild of images)\n" \
+	"make kill-app         # kills the whole app as is, or one layer with make kill-app layer=layer\n" \
+	"make bash-shell       # start a bash shell in a given layer, useful for debugging\n" \
+	"make rebuild-and-run  # rebuild all layers, run the application\n" \
+	"make run-tests        # run all tests, or a specific test with make run-tests spec=path_to_spec\n" \
+	"make rails-console    # run a rails console in the web layer\n" \
+	"make database-console # run a psql REPL in its layer\n" \
+	"make redis-console    # run a redis REPL in its layer\n" \
+	"make get-logs         # get all logs, or to get one layer: make get-logs layer=layer\n" \
 
 # USAGE
 # To do all layers:
@@ -72,20 +71,6 @@ run-app:
 # make kill-app
 # stops all containers, and the app itself
 kill-app:
-	@docker-compose down
-
-# USAGE
-# make start-layer layer=web
-# works with any layer, ie database, redis, webpack-dev-server, web
-# useful for starting a single service
-start-layer:
-	@docker-compose up $(layer)
-
-# USAGE
-# make stop-layer layer=web
-# works with any layer, ie database, redis, webpack-dev-server, web
-# useful for stopping a single service
-stop-layer:
 	@docker-compose down $(layer)
 
 # Run a bash shell for a given layer

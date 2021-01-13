@@ -71,7 +71,7 @@ run-app:
 # make kill-app
 # stops all containers, and the app itself
 kill-app:
-	@docker-compose down $(layer)
+	@docker-compose stop $(layer)
 
 # Run a bash shell for a given layer
 # Useful for debugging happenings on a certain layer in the stack

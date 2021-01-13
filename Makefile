@@ -3,13 +3,11 @@
 db_user=postgres
 
 usage:
-	@echo "\nmake build                    # build all layers\nmake kill-app                 # kills the app\nmake rebuild-all-and-run-app  # rebuild all images, run the full app\nmake run-tests                # run all tests, or just one with 'make run-tests spec=path_to_spec' (works with any spec)\nmake rebuild-layers           # rebuild all layers, or just one with 'make rebuild-layers layer=web' (or any other layer)\nmake rails-console            # enter a rails console\nmake database-console         # enter a database console session in postgresql\nmake redis-console            # enter a redis REPL session\nmake get-logs                 # get all logs, or one layers with 'make get-logs layer=web' (or any other layer)\nmake build                    # build all or one specific layer, make build layer=web\nmake start-layer/stop-layer   # start or stop a layer, make stop-layer|start-layer layer=web\nmake bash-shell layer=layer   # start a bash shell for a given layer"
-
-tester:
 	@echo " Welcome to your friendly makefile interface to docker\n\n" \
 	"These commands will help you interface with the application:\n" \
 	"Usage\n\n" \
 	"make build                    # build all the layers, or just one with make build layer=layer (web, database, redis)\n" \
+	"make bundle                   # bundle install in the web layer\n" \
 	"make run-app                  # runs the whole app as is (no rebuild of images)\n" \
 	"make kill-app                 # kills the whole app as is\n" \
 	"make start-layer              # start a specific layer (web, database, redis, webpack-dev-server)\n" \
@@ -31,6 +29,13 @@ tester:
 # make build layer=web
 build:
 	@docker-compose build $(layer)
+
+# USAGE
+# make bundle
+#
+# Runs bundle install in the web layer
+bundle:
+	@docker-compose exec web bundle
 
 # USAGE
 # $ make run-app

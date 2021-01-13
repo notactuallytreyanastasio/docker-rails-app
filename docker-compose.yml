@@ -12,6 +12,19 @@ services:
       - .env/development/web
       - .env/development/database
 
+  webpack_dev_server:
+    build: .
+    command: ./bin/webpack-dev-server
+    ports:
+      - "3035:3035"
+    volumes:
+      - .:/usr/src/myapp
+    env_file:
+      - .env/development/web
+      - .env/development/database
+    environment:
+      - WEBPACK_DEV_SERVER=0.0.0.0
+
   redis:
     image: redis
     volumes:
